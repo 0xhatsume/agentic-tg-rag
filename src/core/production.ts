@@ -33,8 +33,15 @@ const production = async (
 
     console.log('Payload:');
     console.log(req.body);
-  } else {
+
+    if (!res.headersSent) {
+      res.status(200).end();
+    }
+  } else if (req.method === 'GET') {
     res.status(200).json('Listening to bot events...');
+    console.log('Query Parameters:', req.query);
+  } else {
+    res.status(405).json('Method Not Allowed');
   }
   debug(`starting webhook on port: ${PORT}`);
 };
